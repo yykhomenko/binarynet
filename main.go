@@ -1,24 +1,35 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
 
 const (
-	nodesNum = 10
+	nodesNum      = 10
+	generationNum = 10
 )
 
 func main() {
-	nodes := genNodes()
+	rand.Seed(time.Now().Unix())
+
+	nodes := genNodes(nodesNum)
 	links := genLinks()
 	fmt.Println(nodes)
 
-	for i := 0; i < nodesNum; i++ {
+	for i := 0; i < generationNum; i++ {
 		nodes = genNextNodes(nodes, links)
 		fmt.Println(nodes)
 	}
 }
 
-func genNodes() []int {
-	return []int{0, 1, 0, 1, 0, 1}
+func genNodes(size int) []int {
+	nodes := make([]int, size, size)
+	for i := 0; i < size; i++ {
+		nodes[i] = rand.Intn(2)
+	}
+	return nodes
 }
 
 func genLinks() map[int][]int {
