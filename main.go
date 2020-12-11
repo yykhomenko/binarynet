@@ -12,8 +12,7 @@ func main() {
 	fmt.Println(nodes)
 
 	for i := 0; i < nodesNum; i++ {
-		nextNodes := genNextNodes(nodes, links)
-		nodes = nextNodes
+		nodes = genNextNodes(nodes, links)
 		fmt.Println(nodes)
 	}
 }
@@ -35,8 +34,7 @@ func genLinks() map[int][]int {
 
 func genNextNodes(nodes []int, links map[int][]int) (out []int) {
 	for i := range nodes {
-		res := nextBit(nodes, links[i])
-		out = append(out, res)
+		out = append(out, nextBit(nodes, links[i]))
 	}
 	return
 }
