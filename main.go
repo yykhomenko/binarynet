@@ -5,16 +5,12 @@ import "fmt"
 func main() {
 	nodes := genNodes()
 	links := genLinks()
+	fmt.Println(nodes)
 
-	var nextNodes []int
-	for i := range nodes {
-		l := links[i]
-		res := nextBit(l[0], l[1])
-		nextNodes = append(nextNodes, res)
-	}
+	nextNodes := genNextNodes(nodes, links)
 	nodes = nextNodes
 
-	fmt.Println(nextNodes)
+	fmt.Println(nodes)
 }
 
 func genNodes() []int {
@@ -28,6 +24,15 @@ func genLinks() map[int][]int {
 		2: {0, 1},
 		3: {2, 1},
 	}
+}
+
+func genNextNodes(nodes []int, links map[int][]int) (out []int) {
+	for i := range nodes {
+		l := links[i]
+		res := nextBit(l[0], l[1])
+		out = append(out, res)
+	}
+	return
 }
 
 func nextBit(x, y int) int {
