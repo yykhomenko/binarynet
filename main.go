@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	nodesNum      = 10
+	nodesNum      = 50
+	linkNum       = 2
 	generationNum = 10
 )
 
@@ -15,7 +16,8 @@ func main() {
 	rand.Seed(time.Now().Unix())
 
 	nodes := genNodes(nodesNum)
-	links := genLinks()
+	links := genLinks(nodesNum, linkNum)
+	fmt.Println(links)
 	fmt.Println(nodes)
 
 	for i := 0; i < generationNum; i++ {
@@ -32,25 +34,31 @@ func genNodes(size int) []int {
 	return nodes
 }
 
-func genLinks() map[int][]int {
-	return map[int][]int{
-		0: {1, 2},
-		1: {2, 3},
-		2: {1, 1},
-		3: {2, 4},
-		4: {5, 0},
-		5: {1, 3},
+func genLinks(size, linkNum int) [][]int {
+	links := make([][]int, size, size)
+	for i := 0; i < size; i++ {
+		links[i] = genLink(size, linkNum)
 	}
+
+	return links
 }
 
-func genNextNodes(nodes []int, links map[int][]int) (out []int) {
+func genLink(size, linkNum int) []int {
+	link := make([]int, linkNum, linkNum)
+	for i := 0; i < linkNum; i++ {
+		link[i] = rand.Intn(size)
+	}
+	return link
+}
+
+func genNextNodes(nodes []int, links [][]int) (out []int) {
 	for i := range nodes {
 		out = append(out, nextBit(nodes, links[i]))
 	}
 	return
 }
 
-func nextBit(nodes []int, links []int) int {
+func nextBit(nodes, links []int) int {
 	var p int
 	for i, node := range links {
 		p |= nodes[node] << i
