@@ -1,15 +1,16 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"math/rand"
 	"time"
 )
 
 const (
-	nodesNum      = 50
-	linkNum       = 2
-	generationNum = 10
+	nodesNum      = 20
+	linkNum       = 3
+	generationNum = 100
 )
 
 func main() {
@@ -18,12 +19,24 @@ func main() {
 	nodes := genNodes(nodesNum)
 	links := genLinks(nodesNum, linkNum)
 	fmt.Println(links)
-	fmt.Println(nodes)
+	fmt.Println(toString(nodes))
 
 	for i := 0; i < generationNum; i++ {
 		nodes = genNextNodes(nodes, links)
-		fmt.Println(nodes)
+		fmt.Println(toString(nodes))
 	}
+}
+
+func toString(nodes []int) string {
+	var buf bytes.Buffer
+	for _, data := range nodes {
+		if data == 0 {
+			buf.WriteByte('0')
+		} else {
+			buf.WriteByte(' ')
+		}
+	}
+	return buf.String()
 }
 
 func genNodes(size int) []int {
@@ -37,16 +50,21 @@ func genNodes(size int) []int {
 func genLinks(size, linkNum int) [][]int {
 	links := make([][]int, size, size)
 	for i := 0; i < size; i++ {
-		links[i] = genLink(size, linkNum)
+		links[i] = genLink(size, linkNum, i)
 	}
 
 	return links
 }
 
-func genLink(size, linkNum int) []int {
+func genLink(size, linkNum, node int) []int {
 	link := make([]int, linkNum, linkNum)
 	for i := 0; i < linkNum; i++ {
-		link[i] = rand.Intn(size)
+	retry:
+		n := rand.Intn(size)
+		if n == node {
+			goto retry
+		}
+		link[i] = n
 	}
 	return link
 }
@@ -65,7 +83,7 @@ func nextBit(nodes, links []int) int {
 	}
 
 	switch p {
-	case 0, 1:
+	case 0, 3, 6, 7:
 		return 1
 	default:
 		return 0
