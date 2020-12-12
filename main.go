@@ -29,6 +29,7 @@ func main() {
 
 func toString(nodes []int) string {
 	var buf bytes.Buffer
+	buf.WriteByte('[')
 	for _, data := range nodes {
 		if data == 0 {
 			buf.WriteByte('0')
@@ -36,6 +37,8 @@ func toString(nodes []int) string {
 			buf.WriteByte(' ')
 		}
 	}
+	buf.WriteByte(']')
+
 	return buf.String()
 }
 
